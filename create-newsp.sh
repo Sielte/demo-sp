@@ -11,21 +11,22 @@ sudo apt-get --yes install git wget
 
 echo "=== INSTALLO PUPPET"
 codename=`lsb_release --codename | cut -f2`
-sudo wget https://apt.puppetlabs.com/puppetlabs-release-$codename.deb -O /opt/puppetlabs-release-$codename.deb
-sudo dpkg -i /opt/puppetlabs-release-$codename.deb
+#sudo wget https://apt.puppetlabs.com/puppetlabs-release-$codename.deb -O /opt/puppetlabs-release-$codename.deb
+sudo wget https://apt.puppetlabs.com/puppetlabs-release-pc1-$codename.deb -O /opt/puppetlabs-release-pc1-$codename.deb
+sudo dpkg -i /opt/puppetlabs-release-pc1-$codename.deb
 sudo apt-get update
-sudo apt-get --yes install puppet
+sudo apt-get --yes install puppet-agent
 
 
 echo "=== PUPPET INSTALLO MODULI ==="
 #sudo puppet module install mayflower-php --version 4.0.0-beta1
-sudo puppet module install puppet-php
-sudo puppet module install puppetlabs-apache
+sudo /opt/puppetlabs/bin/puppet module install puppet-php
+sudo /opt/puppetlabs/bin/puppet module install puppetlabs-apache
 
 sudo mkdir -p /opt/spid-simplesamlphp
-sudo chown www-data:www-data /opt/spid-simplesamlphp
 echo "=== CLONE REPOSITORY ==="
-sudo -u www-data git clone https://github.com/italia/spid-simplesamlphp.git /opt/spid-simplesamlphp
+sudo git clone https://github.com/italia/spid-simplesamlphp.git /opt/spid-simplesamlphp
+sudo chown www-data:www-data /opt/spid-simplesamlphp
 
 echo "=== CHIAVI ==="
 sudo apt-key adv --recv-key --keyserver keyserver.ubuntu.com 4F4EA0AAE5267A6C
@@ -42,8 +43,7 @@ else
 fi
 EOF
 
-sudo tee /etc/puppet/manifests/spid.pp << EOF
-include apt
+sudo tee /opt/spid.pp << EOF
 package { 'memcached':
     ensure => 'installed',
 }
@@ -148,7 +148,7 @@ exec { 'sudo bash /opt/makecert.sh':
 EOF
 
 echo "=== APPLICO PUPPET ==="
-sudo puppet apply /etc/puppet/manifests/spid.pp
+sudo /opt/puppetlabs/bin/puppet apply /opt/spid.pp
 sudo chown -R www-data:www-data /opt/spid-simplesamlphp/cert/
 sudo chmod 640 /opt/spid-simplesamlphp/cert/*
 

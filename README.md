@@ -1,12 +1,13 @@
 Script per creare un SP compatibile con SPID
 ==================
 
-In questo repository e' presente uno script per creare un SP da zero
-partendo dalla versione 
+In questo repository è presente uno script per creare un SP (Service Provider) compatibile con SPID.
+
 
 Requisiti
 --------
-Lo script � stato progettato per essere eseguito su una Ubuntu 14.04
+Lo script è stato progettato per essere eseguito su una Ubuntu 14.04.
+
 
 Utilizzo
 --------
@@ -19,6 +20,6 @@ chmod +x /opt/create-newsp.sh
 Risultato
 --------
 
-Il prodotto viene installato nel percorso /opt/spid-simplesamlphp.
-Tramite il browser � possibile accedere https://localhost/simplesaml
+Il percorso di installazione finale è ```/opt/spid-simplesamlphp```.
+Tramite il browser è possibile accedere https://localhost/simplesaml
 
